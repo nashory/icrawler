@@ -9,6 +9,8 @@ from six.moves.urllib.parse import urlparse
 
 from icrawler.utils import ThreadPool
 
+import uuid
+
 
 class Downloader(ThreadPool):
     """Base class for downloader.
@@ -74,8 +76,15 @@ class Downloader(ThreadPool):
         """
         url_path = urlparse(task['file_url'])[2]
         extension = url_path.split('.')[-1] if '.' in url_path else default_ext
+        
+
+        # overwritten for custom file name.
+        #file_idx = self.fetched_num + self.file_idx_offset
+        #return '{:06d}.{}'.format(file_idx, extension)
+        
         file_idx = self.fetched_num + self.file_idx_offset
-        return '{:06d}.{}'.format(file_idx, extension)
+        file_iid = str(uuid.uuid4()).replace('-','')
+        return '{:04d}_{}.{}'.format(file_idx, file_iid, extension)
 
     def reach_max_num(self):
         """Check if downloaded images reached max num.
@@ -240,8 +249,14 @@ class ImageDownloader(Downloader):
                 extension = default_ext
         else:
             extension = default_ext
+        
+        # overwritten for custom file name.
+        #file_idx = self.fetched_num + self.file_idx_offset
+        #return '{:06d}.{}'.format(file_idx, extension)
+        
         file_idx = self.fetched_num + self.file_idx_offset
-        return '{:06d}.{}'.format(file_idx, extension)
+        file_iid = str(uuid.uuid4()).replace('-','')
+        return '{:04d}_{}.{}'.format(file_idx, file_iid, extension)
 
     def worker_exec(self,
                     max_num,

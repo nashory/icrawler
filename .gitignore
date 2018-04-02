@@ -33,3 +33,7 @@ README.md
 
 # Local test scripts
 icrawler/utils/test_proxy.py
+
+# user generated.
+task/
+venv/
